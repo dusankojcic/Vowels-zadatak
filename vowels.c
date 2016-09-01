@@ -19,19 +19,19 @@ e = 0;
 i = 0;
 o = 0;
 u = 0;
-  for ( k = 0; niz[k] < n; k++ ) {
+  for ( k = 0; niz[k] != '\o'; k++ ) {
     if ( niz[k]  == 'a' || niz[k] == 'A' ) {
       a++; }}
-  for ( k = 0; niz[k] < n ; k++ ) {
+  for ( k = 0; niz[k] != '\o'; k++ ) {
     if ( niz[k] == 'e' || niz[k] == 'E' ) {
       e++; }}
-  for ( k = 0; niz[k] < n; k++ ) {
+  for ( k = 0; niz[k] != '\o'; k++ ) {
     if ( niz[k] == 'i' || niz[k] == 'I' ) {
       i++; }}
-  for ( k = 0; niz[k] < n; k++ ) {
+  for ( k = 0; niz[k] != '\o'; k++ ) {
     if ( niz[k] == 'o' || niz[k] == 'O' ) {
       o++; }}
-  for ( k = 0; niz[k] < n; k++ ) {
+  for ( k = 0; niz[k] != '\o'; k++ ) {
     if ( niz[k] == 'u' || niz[k] == 'U' ) {
       u++; }}
 }
