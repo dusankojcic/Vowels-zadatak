@@ -55,6 +55,6 @@ int main() {
 
   unesi(niz);
   velicina_n(niz, &n);
-  broj_samoglasnika(&a, &e, &i, &o, &u, niz);
+  broj_samoglasnika(&a, &e, &i, &o, &u, n, niz);
   print(niz, a, e, i, o, u);
 }
