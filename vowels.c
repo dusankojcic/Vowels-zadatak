@@ -12,29 +12,25 @@ int k = 0;
     printf ("Broj samoglasnika je:\n a: %d\n e:%d\n i:%d\n o:%d\n u:%d\n", a, e, i, o, u);
 }
 
-void broj_samoglasnika( int *a, int *e, int *i, int *o, int *u, int n, char niz[150] ) {
+void broj_samoglasnika( int *a, int *e, int *i, int *o, int *u, int n char niz[150] ) {
  int k;
 a = 0;
 e = 0;
 i = 0;
 o = 0;
 u = 0;
-  for ( k = 0; niz[k] != '\0'; k++ ) {
+  for ( k = 0; niz[k] < n; k++ ) {
     if ( niz[k]  == 'a' || niz[k] == 'A' ) {
-      a++; }}
-  for ( k = 0; niz[k] != '\0'; k++ ) {
+      ++a; }
     if ( niz[k] == 'e' || niz[k] == 'E' ) {
-      e++; }}
-  for ( k = 0; niz[k] != '\0'; k++ ) {
+      ++e; }
     if ( niz[k] == 'i' || niz[k] == 'I' ) {
-      i++; }}
-  for ( k = 0; niz[k] != '\0'; k++ ) {
+      ++i; }
     if ( niz[k] == 'o' || niz[k] == 'O' ) {
-      o++; }}
-  for ( k = 0; niz[k] != '\0'; k++ ) {
+      ++o; }
     if ( niz[k] == 'u' || niz[k] == 'U' ) {
-      u++; }}
-}
+      ++u; }
+}}
 
 int velicina_n( char niz[150], int *n ) {
  *n = strlen ( niz );
@@ -59,6 +55,6 @@ int main() {
 
   unesi(niz);
   velicina_n(niz, &n);
-  broj_samoglasnika(&a, &e, &i, &o, &u, n, niz);
+  broj_samoglasnika(&a, &e, &i, &o, &u, niz);
   print(niz, a, e, i, o, u);
 }
