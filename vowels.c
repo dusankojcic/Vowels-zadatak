@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 void print( char niz[], int a, int e, int i, int o, int u ) {
 int k = 0;
@@ -12,24 +13,33 @@ int k = 0;
     printf ("Broj samoglasnika je:\n a: %d\n e:%d\n i:%d\n o:%d\n u:%d\n", a, e, i, o, u);
 }
 
-void broj_samoglasnika( int *a, int *e, int *i, int *o, int *u, int n char niz[150] ) {
+void broj_samoglasnika( int *a, int *e, int *i, int *o, int *u, int n, char niz[150] ) {
  int k;
-a = 0;
-e = 0;
-i = 0;
-o = 0;
-u = 0;
+ int vowels[5];
+  for ( k = 0; k < 5; k++ ) {
+    vowels[k] = 0; }
+*a = 0;
+*e = 0;
+*i = 0;
+*o = 0;
+*u = 0;
   for ( k = 0; niz[k] < n; k++ ) {
-    if ( niz[k]  == 'a' || niz[k] == 'A' ) {
-      ++a; }
-    if ( niz[k] == 'e' || niz[k] == 'E' ) {
-      ++e; }
-    if ( niz[k] == 'i' || niz[k] == 'I' ) {
-      ++i; }
-    if ( niz[k] == 'o' || niz[k] == 'O' ) {
-      ++o; }
-    if ( niz[k] == 'u' || niz[k] == 'U' ) {
-      ++u; }
+    if ( isalpha(niz[k])  == 'a' || isalpha(niz[k]) == 'A' ) {
+      vowels[0] += 1; }
+    else if ( isalpha(niz[k]) == 'e' || isalpha(niz[k]) == 'E' ) {
+      vowels[1] += 1; }
+    else if ( isalpha(niz[k]) == 'i' || isalpha(niz[k]) == 'I' ) {
+      vowels[2] += 1; }
+    else if ( isalpha(niz[k]) == 'o' || isalpha(niz[k]) == 'O' ) {
+      vowels[3] += 1; }
+    else if ( isalpha(niz[k]) == 'u' || isalpha(niz[k]) == 'U' ) {
+      vowels[4] += 1; }
+
+*a = vowels[0];
+*e = vowels[1];
+*i = vowels[2];
+*o = vowels[3];
+*u = vowels[4];
 }}
 
 int velicina_n( char niz[150], int *n ) {
