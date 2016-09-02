@@ -47,11 +47,11 @@ int velicina_n( char niz[150], int *n ) {
 }
 
 void unesi( char niz[150] ) {
-int i = 0;
  printf("Napisi recenicu.\n");
- while( (niz[i++]=getchar()) != '\n' && i < 150) {
-        ;
-     niz[i] = '\0'; }
+ char *b = niz;
+ size_t bufsize = 150;
+ getline(&b, &bufsize, stdin);
+ 
 }
 
 int main() {
