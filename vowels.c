@@ -11,6 +11,7 @@ printf("Recenica ima %d karaktera:\n\n", n);
 printf ("Broj samoglasnika je:\n a: %d\n e: %d\n"
         " i: %d\n o: %d\n u: %d\n", a, e, i, o, u);
 }
+
 void broj_samoglasnika(int *a, int *e, int *i, int *o, int *u, int n, char niz[150]) {
 int k;
   for (k = 0; k < n; k++) {
@@ -38,16 +39,19 @@ int k;
     }
   }
 }
+
 int velicina_n(char niz[150], int *n) {
 *n = strlen (niz);
 return *n;
 }
+
 void unesi(char niz[150]) {
 printf("Napisi recenicu.\n");
 char *b = niz;
 size_t bufsize = 150;
 getline(&b, &bufsize, stdin);
 }
+
 main() {
 char niz[150];
 int n;
