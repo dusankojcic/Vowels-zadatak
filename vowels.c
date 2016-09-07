@@ -13,33 +13,73 @@ struct memory history[5];
 
 void memorisi(char recenica[], struct memory history[], int choice, int k) {
   if (choice == 1) {
-  strcpy( history[k].recenica, recenica ); }
-  if (k > 4) {
-  strcpy( history[0].recenica, history[1].recenica );
-  strcpy( history[1].recenica, history[2].recenica );
-  strcpy( history[2].recenica, history[3].recenica );
-  strcpy( history[3].recenica, history[4].recenica );
-  strcpy( history[4].recenica, recenica ); }
+    if (k > 4) {
+      k = 1;
+      for ( k; k < 5; k++ ) {
+        strcpy( history[k - 1].recenica, history[k].recenica );
+      }
+    k = 4;
+    strcpy( history[k].recenica, recenica );
+    }
+  }
+  if (choice == 1) {
+  strcpy( history[k].recenica, recenica );
+  }
 }
 
-void istorija(char recenica[], struct memory history[]) {
+void memorisi_samoglasnike(char vowels[], struct memory history[], int choice, int k) {
+  if (choice == 1) {
+    if (k > 4) {
+      k = 1;
+      for ( k; k < 5; k++ ) {
+        strcpy( history[k - 1].vowels, history[k].vowels );
+      }
+    k = 4;
+    strcpy( history[k].vowels, vowels );
+    }
+  }
+  if (choice == 1) {
+  strcpy( history[k].vowels, vowels );
+  }
+}
+
+void istorija(struct memory history[]) {
   int k;
   for ( k = 0; k < 5; k++ ) {
   printf( "Recenica %d glasi: %s\n", k + 1, history[k].recenica); }
 }
 
+void istorija_samoglasnika(struct memory history[]) {
+ int k;
+ int j;
+   for ( k = 0; k < 5; k++ ) {
+      printf("Broj samoglasnika u recenici %d je:\n\n", k + 1);
+      for ( j = 0; j < 5; ++j ) {
+        printf("a: %d\n", history[k].vowels[j]);
+        ++j;
+        printf("e: %d\n", history[k].vowels[j]);
+        ++j;
+        printf("i: %d\n", history[k].vowels[j]);
+        ++j;
+        printf("o: %d\n", history[k].vowels[j]);
+        ++j;
+        printf("u: %d\n\n", history[k].vowels[j]);
+      }
+    }
+}
+
 void istorija_posebno(struct memory history[], int broj2) {
   int k;
   k = broj2;
-  printf("%s", history[k-1].recenica);
+  printf("%s\n", history[k-1].recenica);
 }
 
 void print_recenica(char recenica[]) {
-  puts(recenica);
+ puts(recenica);
 }
 
 void print_samoglasnici(int a, int e, int i, int o, int u) {
-  printf ("Broj samoglasnika je:\n a: %d\n e: %d\n"
+ printf ("Broj samoglasnika je:\n a: %d\n e: %d\n"
           " i: %d\n o: %d\n u: %d\n", a, e, i, o, u);
 }
 
@@ -110,9 +150,9 @@ char unesi(char recenica[]) {
 int main_menu(int *choice) {
   printf("\nMain menu\n");
   printf("1 - Napisi recenicu.\n");
-  printf("2 - Prikazi recenicu.\n");
-  printf("3 - Prikazi broj samoglasnika.\n");
-  printf("4 - Prikazi broj karaktera.\n");
+  printf("2 - Prikazi recenicu poslednju unetu recenicu.\n");
+  printf("3 - Prikazi broj samoglasnika poslednje unete recenice.\n");
+  printf("4 - Prikazi broj karaktera poslednje unete recenice.\n");
   printf("5 - Prikazi istoriju.\n");
   printf("6 - Exit.\n\n");
   scanf("%d", &*choice);
@@ -149,90 +189,103 @@ main() {
       main_menu(&choice);
       fgets(unwantedchar, 40, stdin);
       if (isalpha(unwantedchar[0]) == 0) {
-    switch (choice) {
-      case 1:
-        reset_samoglasnika(&a, &e, &i, &o, &u, vowels);
-        printf("\nNapisi recenicu.\n\n");
-        unesi(recenica);
-        velicina_n(recenica, &n);
-        broj_samoglasnika(&a, &e, &i, &o, &u, n, recenica);
-        unesi_samoglasnike(a, e, i, o, u, vowels);
-        memorisi(recenica, history, choice, k);
-        k++;
-      break;
-      case 2:
-        printf("Vasa recenica je:\n");
-        print_recenica(recenica);
-        break;
-      case 3:
-        print_samoglasnici(a, e, i, o, u);
-        break;
-      case 4:
-        print_karakteri(n);
-        break;
-      case 5:
-      do {
-      printf("1 - Celokupna istorja.\n");
-      printf("2 - Recenice posebno.\n");
-      printf("3 - Exit.\n\n");
-      izbor(&broj);
-      fgets(unwantedchar, 40, stdin);
-        if (isalpha(unwantedchar[0]) == 0) {
-          switch (broj) {
-            case 1:
-              istorija(recenica, history);
-              break;
+        switch (choice) {
+          case 1:
+            reset_samoglasnika(&a, &e, &i, &o, &u, vowels);
+            printf("\nNapisi recenicu.\n\n");
+            unesi(recenica);
+            velicina_n(recenica, &n);
+            broj_samoglasnika(&a, &e, &i, &o, &u, n, recenica);
+            unesi_samoglasnike(a, e, i, o, u, vowels);
+            memorisi(recenica, history, choice, k);
+            memorisi_samoglasnike(vowels, history, choice, k);
+            k++;
+          break;
 
-            case 2:
-              do {
-              printf("1 - Recenica broj 1.\n");
-              printf("2 - Recenica broj 2.\n");
-              printf("3 - Recenica broj 3.\n");
-              printf("4 - Recenica broj 4.\n");
-              printf("5 - Recenica broj 5.\n");
-              printf("6 - Exit.\n\n");
-              izbor2(&broj2);
+          case 2:
+            printf("Vasa recenica je:\n");
+            print_recenica(recenica);
+          break;
+
+          case 3:
+            print_samoglasnici(a, e, i, o, u);
+          break;
+
+          case 4:
+            print_karakteri(n);
+          break;
+
+          case 5:
+            do {
+              printf("1 - Celokupna istorja.\n");
+              printf("2 - Recenice posebno.\n");
+              printf("3 - Exit.\n\n");
+              izbor(&broj);
               fgets(unwantedchar, 40, stdin);
               if (isalpha(unwantedchar[0]) == 0) {
-                switch (broj2) {
+                switch (broj) {
                   case 1:
-                    istorija_posebno(history, broj2);
-                    break;
-                  case 2:
-                    istorija_posebno(history, broj2);
-                    break;
-                  case 3:
-                    istorija_posebno(history, broj2);
-                    break;
-                  case 4:
-                    istorija_posebno(history, broj2);
-                    break;
-                  case 5:
-                    istorija_posebno(history, broj2);
-                    break;
-                  case 6:
-                    break;
-                  default:
-                  printf("Pogresan unos.\n");
-                  printf("Pokusaj ponovo.\n\n");
-                }
-              }
-            } while (broj2 != 6);
-              break;
+                    istorija(history);
+                    istorija_samoglasnika(history);
+                  break;
 
-            case 3:
-            default:
-            printf("Pogresan unos.\n");
-            printf("Pokusaj ponovo.\n\n");
-          }
-        }
-      } while (broj != 3);
-        break;
-      case 6:
-        return 0;
-      default:
-        printf("Pogresan unos.\n");
-        printf("Pokusaj ponovo.\n\n");
+                  case 2:
+                    do {
+                      printf("1 - Recenica broj 1.\n");
+                      printf("2 - Recenica broj 2.\n");
+                      printf("3 - Recenica broj 3.\n");
+                      printf("4 - Recenica broj 4.\n");
+                      printf("5 - Recenica broj 5.\n");
+                      printf("6 - Exit.\n\n");
+                      izbor2(&broj2);
+                      fgets(unwantedchar, 40, stdin);
+                      if (isalpha(unwantedchar[0]) == 0) {
+                        switch (broj2) {
+                          case 1:
+                            istorija_posebno(history, broj2);
+                          break;
+
+                          case 2:
+                            istorija_posebno(history, broj2);
+                          break;
+
+                          case 3:
+                            istorija_posebno(history, broj2);
+                          break;
+
+                          case 4:
+                            istorija_posebno(history, broj2);
+                          break;
+
+                          case 5:
+                            istorija_posebno(history, broj2);
+                          break;
+
+                          case 6:
+                          break;
+
+                          default:
+                            printf("Pogresan unos.\n");
+                            printf("Pokusaj ponovo.\n\n");
+                        }
+                     }
+                  } while (broj2 != 6);
+                    break;
+
+                 case 3:
+                 default:
+                   printf("Pogresan unos.\n");
+                   printf("Pokusaj ponovo.\n\n");
+               }
+             }
+           } while (broj != 3);
+             break;
+                 case 6:
+                 return 0;
+
+                 default:
+                   printf("Pogresan unos.\n");
+                   printf("Pokusaj ponovo.\n\n");
       }
     }
   }
