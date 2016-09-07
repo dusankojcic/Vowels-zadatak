@@ -8,6 +8,7 @@
 struct memory {
    char recenica[150];
    char vowels[5];
+   int karakteri;
  };
 struct memory history[5];
 
@@ -28,50 +29,67 @@ void memorisi(char recenica[], struct memory history[], int choice, int k) {
 }
 
 void memorisi_samoglasnike(char vowels[], struct memory history[], int choice, int k) {
+  int j;
   if (choice == 1) {
     if (k > 4) {
       k = 1;
       for ( k; k < 5; k++ ) {
-        strcpy( history[k - 1].vowels, history[k].vowels );
+        for ( j = 0; j < 5; j++ ) {
+        history[k - 1].vowels[j] = history[k].vowels[j];
+        }
       }
     k = 4;
-    strcpy( history[k].vowels, vowels );
+    for ( j = 0; j < 5; j++ ) {
+      history[k].vowels[j] = vowels[j];
+    }
     }
   }
   if (choice == 1) {
-  strcpy( history[k].vowels, vowels );
+    for ( j = 0; j < 5; j++ ) {
+      history[k].vowels[j] = vowels[j];
+    }
   }
 }
 
 void istorija(struct memory history[]) {
+  int j;
   int k;
   for ( k = 0; k < 5; k++ ) {
-  printf( "Recenica %d glasi: %s\n", k + 1, history[k].recenica); }
-}
-
-void istorija_samoglasnika(struct memory history[]) {
- int k;
- int j;
-   for ( k = 0; k < 5; k++ ) {
-      printf("Broj samoglasnika u recenici %d je:\n\n", k + 1);
-      for ( j = 0; j < 5; ++j ) {
-        printf("a: %d\n", history[k].vowels[j]);
-        ++j;
-        printf("e: %d\n", history[k].vowels[j]);
-        ++j;
-        printf("i: %d\n", history[k].vowels[j]);
-        ++j;
-        printf("o: %d\n", history[k].vowels[j]);
-        ++j;
-        printf("u: %d\n\n", history[k].vowels[j]);
-      }
+    printf("Recenica %d glasi: %s\n", k + 1, history[k].recenica);
+    printf("Broj karaktera u recenici %d je: %d\n\n", k + 1, history[k].karakteri);
+    printf("Broj samoglasnika u recenici %d je:\n\n", k + 1);
+    for ( j = 0; j < 5; j++ ) {
+      printf("a: %d\n", history[k].vowels[j]);
+      ++j;
+      printf("e: %d\n", history[k].vowels[j]);
+      ++j;
+      printf("i: %d\n", history[k].vowels[j]);
+      ++j;
+      printf("o: %d\n", history[k].vowels[j]);
+      ++j;
+      printf("u: %d\n\n", history[k].vowels[j]);
     }
+  }
 }
 
 void istorija_posebno(struct memory history[], int broj2) {
+  int j;
   int k;
   k = broj2;
-  printf("%s\n", history[k-1].recenica);
+  printf("Recenica broj 1 glasi: %s\n", history[k-1].recenica);
+  printf("Broj karaktera u recenici %d je: %d\n\n", k, history[k].karakteri);
+  printf("Broj samoglasnika u recenici %d je:\n\n", k);
+  for ( j = 0; j < 5; j++ ) {
+    printf("a: %d\n", history[k-1].vowels[j]);
+    ++j;
+    printf("e: %d\n", history[k-1].vowels[j]);
+    ++j;
+    printf("i: %d\n", history[k-1].vowels[j]);
+    ++j;
+    printf("o: %d\n", history[k-1].vowels[j]);
+    ++j;
+    printf("u: %d\n\n", history[k-1].vowels[j]);
+  }
 }
 
 void print_recenica(char recenica[]) {
@@ -85,6 +103,23 @@ void print_samoglasnici(int a, int e, int i, int o, int u) {
 
 void print_karakteri(int n) {
   printf("Recenica ima %d karaktera:\n\n", n);
+}
+
+void memorisi_karaktere(int karakteri, struct memory history[], int choice, int k, int n) {
+  if (choice == 1) {
+    if (k > 4) {
+      k = 1;
+      for ( k; k < 5; k++ ) {
+        history[k - 1].karakteri = history[k].karakteri;
+      }
+    k = 4;
+    history[k].karakteri = karakteri;
+    }
+  }
+  if (choice == 1) {
+    karakteri = n;
+    history[k].karakteri = karakteri;
+  }
 }
 
 void reset_samoglasnika(int *a, int *e, int *i, int *o, int *u, char vowels[]) {
@@ -138,6 +173,7 @@ void unesi_samoglasnike(int a, int e, int i, int o, int u, char vowels[]) {
 
 int velicina_n(char recenica[], int *n) {
   *n = strlen (recenica);
+  *n -= 1;
   return *n;
 }
 
@@ -172,6 +208,7 @@ int izbor2(int *broj2) {
 main() {
   char recenica[150];
   char vowels[5];
+  int karakteri;
   char unwantedchar[40];
   unwantedchar[0] = 0;
   int n;
@@ -195,6 +232,7 @@ main() {
             printf("\nNapisi recenicu.\n\n");
             unesi(recenica);
             velicina_n(recenica, &n);
+            memorisi_karaktere(karakteri, history, choice, k, n);
             broj_samoglasnika(&a, &e, &i, &o, &u, n, recenica);
             unesi_samoglasnike(a, e, i, o, u, vowels);
             memorisi(recenica, history, choice, k);
@@ -226,7 +264,6 @@ main() {
                 switch (broj) {
                   case 1:
                     istorija(history);
-                    istorija_samoglasnika(history);
                   break;
 
                   case 2:
