@@ -96,9 +96,19 @@ void print_recenica(char recenica[]) {
  puts(recenica);
 }
 
-void print_samoglasnici(int a, int e, int i, int o, int u) {
- printf ("Broj samoglasnika je:\n a: %d\n e: %d\n"
-          " i: %d\n o: %d\n u: %d\n", a, e, i, o, u);
+void print_samoglasnici(char vowels[]) {
+ int k;
+ for ( k = 0; k < 5; k++ ) {
+   printf("a: %d\n", vowels[k]);
+   ++k;
+   printf("e: %d\n", vowels[k]);;
+   ++k;
+   printf("i: %d\n", vowels[k]);
+   ++k;
+   printf("o: %d\n", vowels[k]);
+   ++k;
+   printf("u: %d\n\n", vowels[k]);
+ }
 }
 
 void print_karakteri(int n) {
@@ -122,65 +132,54 @@ void memorisi_karaktere(int karakteri, struct memory history[], int choice, int 
   }
 }
 
-void reset_samoglasnika(int *a, int *e, int *i, int *o, int *u, char vowels[]) {
-  *a = 0;
-  *e = 0;
-  *i = 0;
-  *o = 0;
-  *u = 0;
-    vowels[0] = *a;
-    vowels[1] = *e;
-    vowels[2] = *i;
-    vowels[3] = *o;
-    vowels[4] = *u;
+void reset_samoglasnika(char vowels[]) {
+  vowels[0] = 0;
+  vowels[1] = 0;
+  vowels[2] = 0;
+  vowels[3] = 0;
+  vowels[4] = 0;
 }
 
-void broj_samoglasnika(int *a, int *e, int *i, int *o, int *u, int n, char recenica[]) {
+void broj_samoglasnika(char vowels[], int n, char recenica[]) {
 int k;
   for (k = 0; k < n; k++) {
     switch(recenica[k]) {
       case 'a':
       case 'A':
-          (*a)++;
+          vowels[0]++;
           break;
       case 'e':
       case 'E':
-          (*e)++;
+          vowels[1]++;
           break;
       case 'i':
       case 'I':
-          (*i)++;
+          vowels[2]++;
           break;
       case 'o':
       case 'O':
-          (*o)++;
+          vowels[3]++;
           break;
       case 'u':
       case 'U':
-          (*u)++;
+          vowels[4]++;
           break;
     }
   }
 }
 
-void unesi_samoglasnike(int a, int e, int i, int o, int u, char vowels[]) {
-  vowels[0] = a;
-  vowels[1] = e;
-  vowels[2] = i;
-  vowels[3] = o;
-  vowels[4] = u;
-}
-
-int velicina_n(char recenica[], int *n) {
-  *n = strlen (recenica);
+void unesi(char **recenica, int *n) {
+  *recenica = (char*)malloc(150 * sizeof(**recenica));
+  size_t bufsize = **recenica;
+  getline(recenica, &bufsize, stdin);
+  *n = strlen(*recenica);
   *n -= 1;
-  return *n;
-}
-
-char unesi(char recenica[]) {
-  char *buffer = recenica;
-  size_t bufsize = 150;
-  getline(&buffer, &bufsize, stdin);
+  *recenica = (void*)realloc(*recenica, (size_t) *n);
+  if (recenica == NULL) {
+    printf("Error! Memory not allocated.");
+    exit(0);
+  }
+  printf("%d\n", *n);
 }
 
 int main_menu(int *choice) {
@@ -205,39 +204,42 @@ int izbor2(int *broj2) {
   return *broj2;
 }
 
-main() {
-  char recenica[150];
+int main() {
+  char *recenica;
   char vowels[5];
   int karakteri;
   char unwantedchar[40];
   unwantedchar[0] = 0;
   int n;
-  int a = 0;
-  int e = 0;
-  int i = 0;
-  int o = 0;
-  int u = 0;
   int k = 0;
   int choice;
   int broj;
   int broj2;
+  int answer;
 
     while (choice != 6) {
       main_menu(&choice);
       fgets(unwantedchar, 40, stdin);
       if (isalpha(unwantedchar[0]) == 0) {
         switch (choice) {
+          do {
+            fgets(unwantedchar, 40, stdin);
+            if (isalpha(unwantedchar[0]) == 0) {
           case 1:
-            reset_samoglasnika(&a, &e, &i, &o, &u, vowels);
+            reset_samoglasnika(vowels);
             printf("\nNapisi recenicu.\n\n");
-            unesi(recenica);
-            velicina_n(recenica, &n);
+            unesi(&recenica, &n);
+            printf("%d\n", n);
             memorisi_karaktere(karakteri, history, choice, k, n);
-            broj_samoglasnika(&a, &e, &i, &o, &u, n, recenica);
-            unesi_samoglasnike(a, e, i, o, u, vowels);
+            broj_samoglasnika(vowels, n, recenica);
             memorisi(recenica, history, choice, k);
             memorisi_samoglasnike(vowels, history, choice, k);
+            free(recenica);
             k++;
+            printf("Da li zelite da unesete jos jednu recenicu?\n"
+                   "[1 - Da]\n[0 - Ne]\n");
+            scanf("%d", &answer); }
+          } while ( answer == 1 );
           break;
 
           case 2:
@@ -246,7 +248,7 @@ main() {
           break;
 
           case 3:
-            print_samoglasnici(a, e, i, o, u);
+            print_samoglasnici(vowels);
           break;
 
           case 4:
@@ -310,6 +312,7 @@ main() {
                     break;
 
                  case 3:
+
                  default:
                    printf("Pogresan unos.\n");
                    printf("Pokusaj ponovo.\n\n");
