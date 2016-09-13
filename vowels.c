@@ -92,8 +92,8 @@ void istorija_posebno(struct memory history[], int broj2) {
   }
 }
 
-void print_recenica(char recenica[]) {
- puts(recenica);
+void print_recenica(struct memory history[], int k) {
+ puts(history[k-1].recenica);
 }
 
 void print_samoglasnici(char vowels[]) {
@@ -179,17 +179,18 @@ void unesi(char **recenica, int *n) {
     printf("Error! Memory not allocated.");
     exit(0);
   }
-  printf("%d\n", *n);
 }
 
 int main_menu(int *choice) {
   printf("\nMain menu\n");
   printf("1 - Napisi recenicu.\n");
-  printf("2 - Prikazi recenicu poslednju unetu recenicu.\n");
+  printf("2 - Prikazi poslednju unetu recenicu.\n");
   printf("3 - Prikazi broj samoglasnika poslednje unete recenice.\n");
   printf("4 - Prikazi broj karaktera poslednje unete recenice.\n");
   printf("5 - Prikazi istoriju.\n");
-  printf("6 - Exit.\n\n");
+  printf("6 - Save.\n");
+  printf("7 - Load.\n");
+  printf("8 - Exit.\n\n");
   scanf("%d", &*choice);
   return *choice;
 }
@@ -204,10 +205,67 @@ int izbor2(int *broj2) {
   return *broj2;
 }
 
-int main() {
+void save(FILE *fp, struct memory history[]) {
+  int i, k;
+  fp = fopen ("Samoglasnici.dat", "w"); // opens file for writing
+
+  if (fp == NULL) {
+    printf("Error while creating file.\n");
+  }
+  for ( i = 0; i < 5; i++ ) {
+    fprintf(fp,"%s\n", history[i].recenica);
+    fprintf(fp, "%d\n\n", history[i].karakteri);
+    for ( k = 0; k < 5; k++ ) {
+    fprintf(fp,"%d\n", history[i].vowels[k]);
+    ++k;
+    fprintf(fp,"%d\n", history[i].vowels[k]);
+    ++k;
+    fprintf(fp,"%d\n", history[i].vowels[k]);
+    ++k;
+    fprintf(fp,"%d\n", history[i].vowels[k]);
+    ++k;
+    fprintf(fp,"%d\n\n", history[i].vowels[k]);
+    }
+  }
+  fclose(fp);
+}
+
+void load(FILE *fp, struct memory history[], int k, char vowels[]) {
+  int i, r;
+  fp = fopen ("Samoglasnici.dat", "r"); // opens file for writing
+
+  if (fp == NULL) {
+    printf("Error while creating file.\n");
+  }
+  for ( i = 0; i < 5; i++ ) {
+    fgets(history[i].recenica, sizeof(history[i].recenica), fp);
+    fscanf(fp,"%d", &history[i].karakteri);
+    reset_samoglasnika(vowels);
+    for ( r = 0; r < 5; r++ ) {
+      fscanf(fp,"%d", &history[i].vowels[r]);
+      ++k;
+      fscanf(fp,"%d", &history[i].vowels[r]);
+      ++k;
+      fscanf(fp,"%d", &history[i].vowels[r]);
+      ++k;
+      fscanf(fp,"%d", &history[i].vowels[r]);
+      ++k;
+      fscanf(fp,"%d", &history[i].vowels[r]);
+    }
+  }
+  fclose(fp);
+}
+
+void karak(int duzina[], int *n) {
+
+}
+
+int main () {
+  FILE *fp;
   char *recenica;
   char vowels[5];
   int karakteri;
+  int duzina[150];
   char unwantedchar[40];
   unwantedchar[0] = 0;
   int n;
@@ -215,9 +273,9 @@ int main() {
   int choice;
   int broj;
   int broj2;
-  int answer;
+  char answer;
 
-    while (choice != 6) {
+    while (choice != 8) {
       main_menu(&choice);
       fgets(unwantedchar, 40, stdin);
       if (isalpha(unwantedchar[0]) == 0) {
@@ -229,22 +287,20 @@ int main() {
             reset_samoglasnika(vowels);
             printf("\nNapisi recenicu.\n\n");
             unesi(&recenica, &n);
-            printf("%d\n", n);
             memorisi_karaktere(karakteri, history, choice, k, n);
             broj_samoglasnika(vowels, n, recenica);
             memorisi(recenica, history, choice, k);
             memorisi_samoglasnike(vowels, history, choice, k);
             free(recenica);
-            k++;
+            k++; }
             printf("Da li zelite da unesete jos jednu recenicu?\n"
-                   "[1 - Da]\n[0 - Ne]\n");
-            scanf("%d", &answer); }
-          } while ( answer == 1 );
+                   "[D]\n[N]\n");
+          } while (scanf("%c", &answer) == 1 && answer == 'D' || answer == 'd');
           break;
 
           case 2:
             printf("Vasa recenica je:\n");
-            print_recenica(recenica);
+            print_recenica(history, k);
           break;
 
           case 3:
@@ -321,6 +377,14 @@ int main() {
            } while (broj != 3);
              break;
                  case 6:
+                 save(fp, history);
+                 break;
+
+                 case 7:
+                 load(fp, history, k, vowels);
+                 break;
+
+                 case 8:
                  return 0;
 
                  default:
